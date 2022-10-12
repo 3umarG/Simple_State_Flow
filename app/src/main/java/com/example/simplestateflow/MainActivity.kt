@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         timerViewModel.startTimer()
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             timerViewModel.timerStateFlow.collect {
                 println("Number : $it")
                 tvNum.text = it.toString()
