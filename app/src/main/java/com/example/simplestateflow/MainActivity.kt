@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var tvNum : TextView
+    private lateinit var tvNum: TextView
     private lateinit var timerViewModel: TimerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,9 +20,11 @@ class MainActivity : AppCompatActivity() {
 
         timerViewModel.startTimer()
 
-        timerViewModel.timerLiveData.observe(this) { num ->
-            println("Number : $num")
-            tvNum.text = num.toString()
+        lifecycleScope.launch {
+            timerViewModel.timerStateFlow.collect {
+                println("Number : $it")
+                tvNum.text = it.toString()
+            }
         }
     }
 }
